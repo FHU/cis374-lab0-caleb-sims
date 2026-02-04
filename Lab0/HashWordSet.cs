@@ -1,3 +1,4 @@
+namespace Lab0;
 
 // [ "ryan", "beau", "caleb", "rye", 
 // "beautiful", "cale", "cephas", "rhino", "cervid", "cecily"
@@ -11,10 +12,13 @@ public sealed class HashWordSet : IWordSet
 {
     private HashSet<string> words = new();
 
+    
     public bool Add(string word)
     {
         return words.Add(word);
     }
+
+    public int Count => words.Count;
 
     public bool Contains(string word)
     {
@@ -23,24 +27,42 @@ public sealed class HashWordSet : IWordSet
 
     public bool Remove(string word)
     {
-        return words.Remove(word);
+        var normalizedWord = Normalize(word);
+        if (normalizedWord.Length == 0)
+        {
+            return false;
+        }
+        return words.Remove(normalizedWord);
     }
 
     /// TODO
     public string? Prev(string word)
     {
-        throw new NotImplementedException();
+        var normWord = Normalize(word);
+
+        string? best = null;
+
+        foreach (var w in words)
+        {
+            if (normWord.CompareTo(w) > 0 && (best is null || w.CompareTo(best) > 0))
+            {
+                best = w;
+            }
+        }
+        return best;
     }
 
     public string? Next(string word)
     {
+        var normWord = Normalize(word);
+
         string? best = null;
 
         // look for a better best
         foreach(var w in words)
         {
             // word < w && w < best
-            if( word.CompareTo(w) < 0
+            if( normWord.CompareTo(w) < 0
                 && (best is null || w.CompareTo(best) < 0))
             {
                 best = w;
@@ -52,11 +74,12 @@ public sealed class HashWordSet : IWordSet
 
     public IEnumerable<string> Prefix(string prefix, int k)
     {
+        var normalizedPrefix = Normalize(prefix);
         var results = new List<string>();
 
         foreach(var word in words)
         {
-            if(word.StartsWith(prefix))
+            if(word.StartsWith(normalizedPrefix))
             {
                 results.Add(word);
             }
@@ -70,7 +93,29 @@ public sealed class HashWordSet : IWordSet
     /// TODO
     public IEnumerable<string> Range(string lo, string hi, int k)
     {
-        throw new NotImplementedException();
+        var nlo = Normalize(lo);
+        var nhi = Normalize(hi);
+
+        var results = new List<string>();
+        foreach (var word in words)
+        {
+            if (word.CompareTo(nlo) > 0 && word.CompareTo(nhi) < 0)
+            {
+                results.Add(word);
+            }
+        }
+        results.Sort();
+        return results.Take(k);
     }
 
+    private string Normalize(string word)
+    {
+        if (string.IsNullOrWhiteSpace(word))
+        {
+            return string.Empty;
+        }
+
+        return word.Trim().ToLowerInvariant();
+    }
 }
+
