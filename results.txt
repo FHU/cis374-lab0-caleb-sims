@@ -1,0 +1,44 @@
+Loaded 354,984 raw lines.
+HashSet count:  354,983
+SortedSet count:354,983
+Iterations: 100, k=100
+
+=== CONTAINS (membership) ===
+HashSet.Contains
+  Time: 0 ms
+  Allocated (thread): 40 bytes
+  Checksum: 50
+SortedSet.Contains
+  Time: 0 ms
+  Allocated (thread): 40 bytes
+  Checksum: 50
+
+=== PREFIX (autocomplete) ===
+HashSet.Prefix
+  Time: 525 ms
+  Allocated (thread): 16,121,336 bytes
+  Checksum: 74,211
+SortedSet.Prefix
+  Time: 254 ms
+  Allocated (thread): 229,680 bytes
+  Checksum: 74,211
+
+=== RANGE (lex range) ===
+HashSet.Range
+  Time: 2,193 ms
+  Allocated (thread): 59,495,944 bytes
+  Checksum: 91,769
+SortedSet.Range
+  Time: 1 ms
+  Allocated (thread): 263,536 bytes
+  Checksum: 91,769
+
+=== NEXT/PREV (neighbors) ===
+HashSet.Next/Prev
+  Time: 2,503 ms
+  Allocated (thread): 40 bytes
+  Checksum: 1,880
+SortedSet.Next/Prev
+  Time: 0 ms
+  Allocated (thread): 92,040 bytes
+  Checksum: 1,880

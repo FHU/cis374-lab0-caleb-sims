@@ -12,16 +12,23 @@ public sealed class HashWordSet : IWordSet
 {
     private HashSet<string> words = new();
 
-    
+    public int Count => words.Count;
+
     public bool Add(string word)
     {
+        var normalizedWord = Normalize(word);
+        if (normalizedWord.Length == 0)
+            return false;
+
         return words.Add(word);
     }
 
-    public int Count => words.Count;
-
     public bool Contains(string word)
     {
+        var normalizedWord = Normalize(word);
+        if (normalizedWord.Length == 0)
+            return false;
+
         return words.Contains(word);
     }
 
@@ -29,10 +36,9 @@ public sealed class HashWordSet : IWordSet
     {
         var normalizedWord = Normalize(word);
         if (normalizedWord.Length == 0)
-        {
             return false;
-        }
-        return words.Remove(normalizedWord);
+
+        return words.Remove(word);
     }
 
     /// TODO
@@ -54,15 +60,17 @@ public sealed class HashWordSet : IWordSet
 
     public string? Next(string word)
     {
-        var normWord = Normalize(word);
+        var normalizedWord = Normalize(word);
+        if (normalizedWord.Length == 0)
+            return null;
 
         string? best = null;
 
         // look for a better best
-        foreach(var w in words)
+        foreach (var w in words)
         {
             // word < w && w < best
-            if( normWord.CompareTo(w) < 0
+            if (word.CompareTo(w) < 0
                 && (best is null || w.CompareTo(best) < 0))
             {
                 best = w;
@@ -75,11 +83,12 @@ public sealed class HashWordSet : IWordSet
     public IEnumerable<string> Prefix(string prefix, int k)
     {
         var normalizedPrefix = Normalize(prefix);
+
         var results = new List<string>();
 
-        foreach(var word in words)
+        foreach (var word in words)
         {
-            if(word.StartsWith(normalizedPrefix))
+            if (word.StartsWith(normalizedPrefix))
             {
                 results.Add(word);
             }
@@ -107,15 +116,17 @@ public sealed class HashWordSet : IWordSet
         results.Sort();
         return results.Take(k);
     }
-
+    /// <summary>
+    /// Normalize a word by trimming whitespace and converting to lowercase.
+    /// </summary>
+    /// <param name="word">The word to normalize.</param>
+    /// <returns>The normalized word.</returns>
     private string Normalize(string word)
     {
         if (string.IsNullOrWhiteSpace(word))
-        {
             return string.Empty;
-        }
 
+        // Trim and lowercase 
         return word.Trim().ToLowerInvariant();
     }
 }
-
