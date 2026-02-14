@@ -19,7 +19,7 @@ public sealed class HashWordSet : IWordSet
         var normalizedWord = Normalize(word);
         if (normalizedWord.Length == 0)
             return false;
-
+        
         return words.Add(word);
     }
 
@@ -29,7 +29,7 @@ public sealed class HashWordSet : IWordSet
         if (normalizedWord.Length == 0)
             return false;
 
-        return words.Contains(word);
+        return words.Contains(normalizedWord);
     }
 
     public bool Remove(string word)
@@ -38,13 +38,16 @@ public sealed class HashWordSet : IWordSet
         if (normalizedWord.Length == 0)
             return false;
 
-        return words.Remove(word);
+        return words.Remove(normalizedWord);
     }
 
     /// TODO
     public string? Prev(string word)
     {
         var normWord = Normalize(word);
+
+        if (normWord.Length == 0)
+            return null;
 
         string? best = null;
 
@@ -70,7 +73,7 @@ public sealed class HashWordSet : IWordSet
         foreach (var w in words)
         {
             // word < w && w < best
-            if (word.CompareTo(w) < 0
+            if (normalizedWord.CompareTo(w) < 0
                 && (best is null || w.CompareTo(best) < 0))
             {
                 best = w;
@@ -105,10 +108,13 @@ public sealed class HashWordSet : IWordSet
         var nlo = Normalize(lo);
         var nhi = Normalize(hi);
 
+        if (nlo.Length == 0 || nhi.Length == 0)
+            return Enumerable.Empty<string>();
+
         var results = new List<string>();
         foreach (var word in words)
         {
-            if (word.CompareTo(nlo) > 0 && word.CompareTo(nhi) < 0)
+            if (word.CompareTo(nlo) >= 0 && word.CompareTo(nhi) <= 0)
             {
                 results.Add(word);
             }
