@@ -363,13 +363,14 @@ public sealed class HashWordSetTests
         wordSet.Add("ethel");
 
         var results = wordSet.Range("cale", "ethel", 10).ToList();
-        Assert.AreEqual(6, results.Count);
+        Assert.AreEqual(7, results.Count);
         Assert.AreEqual("cale", results[0]);
         Assert.AreEqual("caleb", results[1]);
         Assert.AreEqual("cecily", results[2]);
         Assert.AreEqual("cephas", results[3]);
         Assert.AreEqual("cervid", results[4]);
-        Assert.AreEqual("ethel", results[5]);
+        Assert.AreEqual("ethan", results[5]);
+        Assert.AreEqual("ethel", results[6]);
 
         var limited = wordSet.Range("beau", "rye", 3).ToList();
         Assert.AreEqual(3, limited.Count);

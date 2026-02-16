@@ -85,15 +85,12 @@ public class SortedWordSet : IWordSet
 
         var normalizedPrefix = Normalize(prefix);
         if(normalizedPrefix.Length == 0)
-            return new List<string>();
+            return words;
 
         // do the work
         int count = 0;
         string lo = normalizedPrefix;
-        string hi = normalizedPrefix + "{";
-
-        lo = normalizedPrefix;
-        hi = normalizedPrefix + "{";
+        string hi = normalizedPrefix + "z";
 
         foreach (var candidate in words.GetViewBetween(lo, hi))
         {
